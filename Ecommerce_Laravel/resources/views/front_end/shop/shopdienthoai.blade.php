@@ -22,7 +22,7 @@
                             <li class="menu_item" cid="asc">Giá tăng dần</li>
                             <li class="menu_item" cid="desc">Giá giảm dần</li>
                         </ul>
-                    </div>
+                    </div> 
                 </div>
 
                 <!-- Product wrap -->
@@ -40,24 +40,22 @@
                                 <i class="fa-solid fa-rotate-right reset-icon"></i>
                             </div>
                         </div>
+
+                
                         <!--  Filter body-->
 
                         <div class="filter-body">
                             <h2 class="filter-body-title">Phân loại</h2>
 
                             <ul class="filter-body-list">
-                                 <li class="filter-body-item  active">
-                                    <span>Điện thoại</span>
-                                    <i class="fa-solid fa-circle-dot"></i>
-                                </li>
-                                <li class="filter-body-item ">
-                                    <span> Điện thoại</span>
-                                    <i class="fa-solid fa-circle-dot"></i>
-                                </li>
-                                <li class="filter-body-item">
-                                    <span>Điện thoại</span>
-                                    <i class="fa-solid fa-circle-dot"></i>
-                                </li> 
+                                @foreach ($data_category as $data)
+                                    <li class="filter-body-item">
+                                        <a href="/dienthoai/{{$data->Tenthuonghieu}}">{{$data->Tenthuonghieu}}</a>
+                                        <i class="fa-solid fa-circle-dot"></i>
+                                    </li>
+                                @endforeach
+                                 
+                               
 
                             </ul>
                         </div>
@@ -89,7 +87,7 @@
 
                     <div class="col product-list">
                         <div class="row">
-                            @foreach ($data as $item)
+                            @foreach ($data_products as $item)
                             <div class='col-4'>
                                 <div class='product-item'>
                                     <a class='text-decoration-none' href = 'productdetail.php?id={$id}'>
@@ -113,10 +111,9 @@
                                 </div>
                             </div>
                             @endforeach
-                        </div>
+                        </div> 
                     </div>
                 </div>
             </div>
-                
         </section>
     @endsection

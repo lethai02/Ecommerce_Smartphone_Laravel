@@ -9,8 +9,9 @@ class ProductsController extends Controller
 {
     public function getProduct(){
         $data = Products::all();
-        return view('front_end.shop.shopdienthoai',[
-            'data' => $data,
-        ]);
+        // return view('front_end.shop.shopdienthoai',[
+        //     'data_products' => $data,
+        // ]);
+        return $data;
     }
 }
