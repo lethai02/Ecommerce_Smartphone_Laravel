@@ -47,7 +47,7 @@
     <nav class="navbar navbar-expand-lg header">
         <div class="container-fluid">
             <a class="header_logo" href="index.php">
-                <img src="asset/image/logovorke1231.png" alt="">
+                <img src="{{asset('asset/image/logovorke.png') }}" alt="">
             </a>
           <button
             class="navbar-toggler"
@@ -62,7 +62,7 @@
           </button>
           <div class="collapse navbar-collapse " id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link" href="dienthoai">Điện thoại</a>
+              <a class="nav-link" href="/dienthoai">Điện thoại</a>
               <a class="nav-link" href="#">Giỏ hàng</a>
               <a class="nav-link" href="#">Contact</a>
               <a class="nav-link">Đăng nhập/Đăng ký</a>

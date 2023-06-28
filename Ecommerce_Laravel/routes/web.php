@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,15 +20,9 @@ use App\Http\Controllers\CategoryController;
 Route::get('/', function () {
     return view('front_end.layout_app.home');
 });
-Route::get('/dienthoai',function(){
-    $controller_product = new ProductsController();
-    $controller_category = new CategoryController();
-    $data_products = $controller_product->getProduct();
-    $data_category = $controller_category->getCategory();
-    return view('front_end.shop.shopdienthoai',[
-        'data_products' => $data_products,
-        'data_category' => $data_category
-    ]);
-});
 
+    Route::get('/dienthoai/{category}', [CategoryController::class, 'getProductsbyCategory'])
+    ->name('front_end.shop.shopdienthoai');
+Route::get('/dienthoai', [CategoryController::class, 'getProductsbyCategory'])->name('front_end.shop.shopdienthoai');
 
+Route::post('/autocomplete-ajax', [HomeController::class, 'autocomplete_ajax'])->name('search.jax');

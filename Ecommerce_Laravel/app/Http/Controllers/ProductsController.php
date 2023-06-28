@@ -14,4 +14,5 @@ class ProductsController extends Controller
         // ]);
         return $data;
     }
+
 }
