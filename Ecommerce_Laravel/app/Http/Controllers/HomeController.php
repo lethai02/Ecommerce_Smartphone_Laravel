@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Products;
+use App\Models\Category;
 class HomeController extends Controller
 {
     public function autocomplete_ajax(Request $request) 
@@ -19,11 +20,18 @@ class HomeController extends Controller
                 $output .= '<li class="li_search_ajax"><a href="">' . $product->Tendt . '</a></li>';
             }
             $output .= '</ul>';
-            return $output;
+            
         }
+        return $output;
     }
 
-
-   
+    public function test(Request $request){
+        $data = $request->all();
+            $a = $data['a'];
+            return $a;
+         
+     }
+    
+ 
 }
 

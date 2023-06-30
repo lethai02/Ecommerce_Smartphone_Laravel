@@ -8,6 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vorke</title>
     <link rel="icon" href="{{asset('asset/image/logoicon.png') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   {{-- <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet"/> --}}
  <link rel="stylesheet" href="{{asset('asset/css_frontend/index.css')}}"/>
@@ -25,28 +27,29 @@
     @include('front_end/layout_app/footer');
 </body>
 </html>
+<script src="{{asset('asset/slider_price.js')}}"></script>
 <script>
-    // tạo thanh tìm kiếm khoảng giá
-        $( "#slider-range" ).slider({
-      range: true,
-      min: 0,
-      max: 500,
-      values: [ 0, 500 ],
-      step:10,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "  VND  " + ui.values[ 0 ] + " -  VND  " + ui.values[ 1 ] );
-        $( "#start_price").val(ui.values[ 0 ] );
-        $( "#end_price").val( ui.values[ 1 ]);
-  
+      $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
-    });
-    $( "#amount" ).val(  "  VND  " + $( "#slider-range" ).slider( "values", 0 ) +
-      " -  VND  " + $( "#slider-range" ).slider( "values", 1 ) );
-
-   
-
-
+});
     $(document).ready(function() {
+
+        $('.checkajax').on('click', function(){
+           var a =  $('#start_price').val();
+            $.ajax({
+                            url: "{{ route('test_ajax') }}",
+                            method: 'GET',
+                            data: {
+                                a:a
+                            },
+                            success: function(data) {
+                            
+                                $('#testgia').html(data);
+                            },
+                        });
+        });
         // sort
         $('#sort').on('change', function() {
             var url = $(this).val();
@@ -59,35 +62,52 @@
 
     //tim kiem
         $('#keywords').keyup(function() {
-            $('#keywords').keyup(function() {
                     var query = $(this).val();
                     if(query !=''){
-                        var csrfToken = $('input[name="_token"]').val();
                         $.ajax({
                             url: "{{ route('search.jax') }}",
                             method: 'POST',
                             data: {
                                 query: query,
-                                _token: csrfToken
                             },
                             success: function(data) {
                                 $('#search_ajax').fadeIn();
-                                $('#search_ajax').html(data);
+                                $('#search_ajax').html(data)
                             },
                         });
                     }else{
                         $('#search_ajax').fadeOut();
                     }
-            });
         });
 
-        
+        // lưu giá trị trong ô input sau khi submit
+          // Restore input values if available
+          if (localStorage.getItem("start_price")) {
+            $('#start_price').val(localStorage.getItem("start_price"));
+        }
+        if (localStorage.getItem("end_price")) {
+            $('#end_price').val(localStorage.getItem("end_price"));
+        }
+
+        // Submit form event
+        $('#locgia-form').on('submit', function(event) {
+            // Store input values in localStorage
+            localStorage.setItem("start_price", $('#start_price').val());
+            localStorage.setItem("end_price", $('#end_price').val());
+        });
     });
 
-    $(document).on('click','.li_search_ajax'),function(){
-        $('#keywords').val($(this).text());
-        $('#search_ajax').fadeOut();
-    }
+    
+   
+        
+    
+    // hiển thị giá trị minmax 
+    
+    // $(document).on('click','.li_search_ajax'),function(){
+    //     $('#keywords').val($(this).text());
+    //     $('#search_ajax').fadeOut();
+    // }
   
- 
+    
  </script>
+  

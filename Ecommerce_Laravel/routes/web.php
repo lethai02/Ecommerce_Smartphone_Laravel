@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HomeController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,3 +27,4 @@ Route::get('/', function () {
 Route::get('/dienthoai', [CategoryController::class, 'getProductsbyCategory'])->name('front_end.shop.shopdienthoai');
 
 Route::post('/autocomplete-ajax', [HomeController::class, 'autocomplete_ajax'])->name('search.jax');
+Route::get('/test',  [HomeController::class, 'test'])->name('test_ajax');

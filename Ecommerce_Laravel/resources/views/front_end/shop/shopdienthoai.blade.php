@@ -6,7 +6,6 @@
                 <div class="content">
                     <div class="content_input-search">
                         <form action="{{URL::to('/dienthoai')}}" autocomplete="off" method="POST">
-                             {{csrf_field()}}
                          
                             <span class="content_input-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                             <input type="text" name="keywords_submit" placeholder="Tìm kiếm..." id="keywords">
@@ -16,6 +15,7 @@
                 </div>
                 <hr>    
                 <!-- Search content -->
+                
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item"><a href="{{url('/dienthoai')}}">Home</a></li>
@@ -80,12 +80,14 @@
 
                         <div class="filter-price">
                             <h2 class="filter-price-title">Giá sản phẩm</h2>
-                            <div>
+                            {{-- <div> --}}
+                                <div>
                                 <label>Lọc giá theo </label>
                                 <p>
                                     <label for="amount">Price range:</label>
                                   </p>
-                                <form>
+                                {{-- <form> --}}
+                                {{-- <form id="locgia-form">
                                     <div id="slider-range"></div>   
                                     <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
                                 <br>
@@ -94,9 +96,23 @@
                                 <input type="text" id="end_price" name="end_price">
 
                                     <input type="submit" name="filter" value="Lọc giá" class="btn btn-dark" id="locgia" >
-                                </form> 
-                                
-                                <div id="test">asd</div>
+
+                                </form>  --}}
+
+                                {{-- test --}}
+                                <form id="locgia-form" >
+                                    <div id="slider-range"></div>
+                                    <input type="text" id="amount"  readonly style="border:0; color:#f6931f; font-weight:bold;">
+                                    <br>
+                                    <input type="text" id="start_price" name="start_price">
+                                    <br>
+                                    <input type="text" id="end_price" name="end_price">
+                                    <input type="submit" name="filter" value="Lọc giá" class="btn btn-dark" id="locgia">
+                                  
+                                </form>
+                                <button class="checkajax">LOC GIA </a>
+
+                                <div id="testgia"></div>
                             </div>   
                            
                             <div class="filter-price-input">
@@ -123,31 +139,36 @@
 
                     <div class="col product-list">
                         <div class="row">
-                            @foreach ($data_products as $item)
-                            <div class='col-4'>
-                                <div class='product-item'>
-                                    <a class='text-decoration-none' '>
-                                        <div class='product-item_img'>
-                                        <img src="{{asset('asset/image/logoicon.png') }}" alt=''">
-                                    </div>
-                                    </a>
-                                    <div class='product-item-body'>
-                                        <h2>{{$item->Tendt}}</h2>
-                                        <p> {{$item->Mota}}</p>
-                                        <div class='product-item-body-price'>
-                                            {{-- <p>{{$item->Gia}}</p> --}}
+                            @if($data_products->isEmpty())
+                                <p>loi</p>
+                            @else
+                                @foreach ($data_products as $item)
+                                <div class='col-4'>
+                                    <div class='product-item'>
+                                        <a class='text-decoration-none' '>
+                                            <div class='product-item_img'>
+                                            <img src="{{asset('asset/image/logoicon.png') }}" alt=''">
                                         </div>
-                                        <p>{{$item->Gia}}</p>
-                                        <div class='product-item-body_control'>
-                                            <button >Đặt ngay</button>
+                                        </a>
+                                        <div class='product-item-body'>
+                                            <h2>{{$item->Tendt}}</h2>
+                                            <p> {{$item->Mota}}</p>
+                                            <div class='product-item-body-price'>
+                                                {{-- <p>{{$item->Gia}}</p> --}}
+                                            </div>
+                                            <p>{{$item->Gia}}</p>
+                                            <div class='product-item-body_control'>
+                                                <button >Đặt ngay</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            @endforeach
+                                @endforeach
+                            @endif 
                         </div> 
                     </div> 
                 </div>
             </div>
         </section>
     @endsection
+   

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Livewire\Withpagination;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -10,14 +11,13 @@ use App\Models\Products;
 class CategoryController extends Controller
 {
 
-    
-    public function getProductsbyCategory(Request $request,$category = null)
+
+    public function getProductsbyCategory( Request$request,$category = null)
     {
        
         $data_category = Category::all();
         $data_products = Products::query();
         $sortingOrder = $request->input('sorting', '');
-        
         //timkiem
         if ($category) {
             $data_products->join('thuonghieu', 'products.id_thuonghieu', '=', 'thuonghieu.id_thuonghieu')
@@ -45,9 +45,12 @@ class CategoryController extends Controller
             $category_name = $data->Tenthuonghieu;
         }
     
-        return view('front_end.shop.shopdienthoai',['data_category' => $data_category,
-         'data_products'=>$data_products,'category_name'=>$category_name,
-         'sorting'=>$sortingOrder,
+        return view('front_end.shop.shopdienthoai',[
+            'data_category' => $data_category,
+            'data_products'=>$data_products,
+            'category_name'=>$category_name,
+            'sorting'=>$sortingOrder,
+            
         ]);
     }
     
