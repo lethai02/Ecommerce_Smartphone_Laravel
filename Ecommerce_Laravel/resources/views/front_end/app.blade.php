@@ -35,12 +35,11 @@
     }
 });
     $(document).ready(function() {
-
         $('.checkajax').on('click', function(){
            var a =  $('#start_price').val();
             $.ajax({
                             url: "{{ route('test_ajax') }}",
-                            method: 'GET',
+                            method: 'POST',
                             data: {
                                 a:a
                             },

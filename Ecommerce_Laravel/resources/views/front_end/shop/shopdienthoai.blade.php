@@ -27,9 +27,14 @@
                 <div class="menu_arrange--wrap">
                     <div class="menu_arrange">
                         <select name="sort" id="sort" class="form_control">
-                            <option value="{{Request::url()}}?sorting=none" @if($sorting == 'none') selected @endif>--Lọc--</option>
-                            <option value="{{Request::url()}}?sorting=asc" @if($sorting == 'asc') selected @endif>--Giá tăng dần--</option>
-                            <option value="{{Request::url()}}?sorting=desc" @if($sorting == 'desc') selected @endif>--Giá giảm dần--</option>
+                            {{-- <option value="{{Request::url()}}?sorting=none" @if($sorting == 'none') selected @endif>--Lọc--</option> --}}
+                            {{-- <option value="{{Request::url()}}?sorting=asc" @if($sorting == 'asc') selected @endif>--Giá tăng dần--</option>
+                            <option value="{{Request::url()}}?sorting=desc" @if($sorting == 'desc') selected @endif>--Giá giảm dần--</option> --}}
+                        {{-- chatGPT --}}
+                        <option value="{{ Request::url() }}?sorting=none&start_price=&end_price=" @if($sorting == 'none' && $start_price=='' && $end_price=='') selected @endif>--Tất cả--</option>
+                        <option value="{{Request::url()}}?sorting=asc&start_price={{$start_price}}&end_price={{$end_price}}" @if($sorting == 'asc' && $start_price=='' && $end_price=='') selected @endif>--Giá tăng dần--</option>
+             <option value="{{Request::url()}}?sorting=desc&start_price={{$start_price}}&end_price={{$end_price}}" @if($sorting == 'desc' && $start_price=='' && $end_price=='') selected @endif>--Giá giảm dần--</option>
+
                         </select>
                     </div> 
                 </div>
@@ -100,19 +105,21 @@
                                 </form>  --}}
 
                                 {{-- test --}}
-                                <form id="locgia-form" >
+                                <form id="locgia-form"  action="{{Request::url()}}" >
                                     <div id="slider-range"></div>
                                     <input type="text" id="amount"  readonly style="border:0; color:#f6931f; font-weight:bold;">
                                     <br>
                                     <input type="text" id="start_price" name="start_price">
                                     <br>
                                     <input type="text" id="end_price" name="end_price">
-                                    <input type="submit" name="filter" value="Lọc giá" class="btn btn-dark" id="locgia">
-                                  
+                                    <input type="submit" name="" value="LOC" class="btn btn-dark" id="locgia">
+                                    <a class="checkajax">LOC GIA </a>
+                                   
+
                                 </form>
-                                <button class="checkajax">LOC GIA </a>
 
                                 <div id="testgia"></div>
+                            
                             </div>   
                            
                             <div class="filter-price-input">

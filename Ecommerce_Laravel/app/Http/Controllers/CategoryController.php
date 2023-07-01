@@ -23,20 +23,37 @@ class CategoryController extends Controller
             $data_products->join('thuonghieu', 'products.id_thuonghieu', '=', 'thuonghieu.id_thuonghieu')
                 ->where('thuonghieu.Tenthuonghieu', $category);
         }
-    
-
+     // chat GPT
+     if ($request->has('start_price') && $request->has('end_price')) {
+        $start_price = $request->input('start_price');
+        $end_price = $request->input('end_price');
+        $data_products->whereBetween('products.Gia', [$start_price, $end_price]);
+    }
     // Sort the products based on the selected order
     if ($sortingOrder === 'asc') {
         $data_products->orderBy('Gia', 'asc');
     } else if ($sortingOrder === 'desc') {
         $data_products->orderBy('Gia', 'desc');
     }
-    elseif(isset($_GET['start_price']) && $_GET['end_price']) {
-        $min_price = $_GET['start_price'];
-        $max_price = $_GET['end_price'];
-        $data_products->whereBetween('products.Gia', [$min_price, $max_price]);
-    }
+    // elseif(isset($_GET['start_price']) && isset($_GET['end_price'])) {
+    //     $min_price = $_GET['start_price'];
+    //     $max_price = $_GET['end_price'];
+    //     $data_products->whereBetween('products.Gia', [$min_price, $max_price]);
+    // }
+    // elseif(isset($_GET['start_price']) && isset($_GET['end_price']) ) {
+    //     $min_price = $_GET['start_price'];
+    //     $max_price = $_GET['end_price'];
+    //     $data_products->whereBetween('products.Gia', [$min_price, $max_price])->orderByDesc('products.Gia');
 
+    // }
+    // elseif(isset($_GET['start_price']) && isset($_GET['end_price']) && isset($_GET['sorting' === 'asc'])) {
+    //     $min_price = $_GET['start_price'];
+    //     $max_price = $_GET['end_price'];
+    //     $data_products->whereBetween('products.Gia', [$min_price, $max_price])->orderBy('products.Gia');
+
+    // }
+
+   
     $category_name = ($category != '') ? null : ''; // Khởi
 
 
@@ -44,14 +61,16 @@ class CategoryController extends Controller
         foreach ($data_products as $data){
             $category_name = $data->Tenthuonghieu;
         }
-    
         return view('front_end.shop.shopdienthoai',[
             'data_category' => $data_category,
             'data_products'=>$data_products,
             'category_name'=>$category_name,
             'sorting'=>$sortingOrder,
-            
+            //chatgpt
+            'start_price' => $request->input('start_price'),
+            'end_price' => $request->input('end_price'),
         ]);
     }
+  
     
 }
