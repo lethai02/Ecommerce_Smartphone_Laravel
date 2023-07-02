@@ -27,7 +27,7 @@ class CategoryController extends Controller
      if ($request->has('start_price') && $request->has('end_price')) {
         $start_price = $request->input('start_price');
         $end_price = $request->input('end_price');
-        $data_products->whereBetween('products.Gia', [$start_price, $end_price]);
+    $data_products->whereBetween('products.Gia', [$start_price, $end_price]);
     }
     // Sort the products based on the selected order
     if ($sortingOrder === 'asc') {
@@ -57,9 +57,12 @@ class CategoryController extends Controller
     $category_name = ($category != '') ? null : ''; // Khởi
 
 
-        $data_products = $data_products->get();
+        // $data_products = $data_products->get();
+        $data_products = $data_products->paginate(10); // Paginate the products, 10 items per page
+
         foreach ($data_products as $data){
             $category_name = $data->Tenthuonghieu;
+            $product_name = $data->Tendt;
         }
         return view('front_end.shop.shopdienthoai',[
             'data_category' => $data_category,
@@ -69,8 +72,10 @@ class CategoryController extends Controller
             //chatgpt
             'start_price' => $request->input('start_price'),
             'end_price' => $request->input('end_price'),
+            'product_name' => $product_name,
         ]);
     }
   
+    
     
 }

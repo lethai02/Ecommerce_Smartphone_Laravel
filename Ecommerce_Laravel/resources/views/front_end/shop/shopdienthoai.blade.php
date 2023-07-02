@@ -5,10 +5,16 @@
             <div class="container">
                 <div class="content">
                     <div class="content_input-search">
-                        <form action="{{URL::to('/dienthoai')}}" autocomplete="off" method="POST">
+                        {{-- <form action="{{URL::to('/dienthoai')}}" autocomplete="off" method="POST">
                          
                             <span class="content_input-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                             <input type="text" name="keywords_submit" placeholder="Tìm kiếm..." id="keywords">
+                        </form> --}}
+                        <form action="{{URL::to('/dienthoai')}}" >
+                         
+                            <span class="content_input-search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input type="text" name="keywords" placeholder="Tìm kiếm..." id="keywords">
+                            <input type='submit' name='search' value="Search">
                         </form>
                     </div>
                     <div id="search_ajax"> </div>
@@ -19,23 +25,35 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                       <li class="breadcrumb-item"><a href="{{url('/dienthoai')}}">Home</a></li>
-                      <li class="breadcrumb-item"><a href="">{{$category_name}}</a></li>
-                      <li class="breadcrumb-item active" aria-current="page">Data</li>
+                      <li class="breadcrumb-item"><a href="{{url('/dienthoai/'.$category_name)}}">{{$category_name}}</a></li>
+                      <li class="breadcrumb-item">data</li>
                     </ol>
                   </nav>
                 <!-- Menu bar -->
                 <div class="menu_arrange--wrap">
                     <div class="menu_arrange">
                         <select name="sort" id="sort" class="form_control">
-                            {{-- <option value="{{Request::url()}}?sorting=none" @if($sorting == 'none') selected @endif>--Lọc--</option> --}}
-                            {{-- <option value="{{Request::url()}}?sorting=asc" @if($sorting == 'asc') selected @endif>--Giá tăng dần--</option>
-                            <option value="{{Request::url()}}?sorting=desc" @if($sorting == 'desc') selected @endif>--Giá giảm dần--</option> --}}
-                        {{-- chatGPT --}}
-                        <option value="{{ Request::url() }}?sorting=none&start_price=&end_price=" @if($sorting == 'none' && $start_price=='' && $end_price=='') selected @endif>--Tất cả--</option>
-                        <option value="{{Request::url()}}?sorting=asc&start_price={{$start_price}}&end_price={{$end_price}}" @if($sorting == 'asc' && $start_price=='' && $end_price=='') selected @endif>--Giá tăng dần--</option>
-             <option value="{{Request::url()}}?sorting=desc&start_price={{$start_price}}&end_price={{$end_price}}" @if($sorting == 'desc' && $start_price=='' && $end_price=='') selected @endif>--Giá giảm dần--</option>
-
+                            @php
+                                $output = '';
+                        
+                                if ($start_price == '' && $end_price == '') {
+                                    $output .= '
+                                        <option value="' . Request::url() . '?sorting=none" ' . ($sorting == 'none' ? 'selected' : '') . '>--Lọc--</option>
+                                        <option value="' . Request::url() . '?sorting=asc" ' . ($sorting == 'asc' ? 'selected' : '') . '>--Giá tăng dần--</option>
+                                        <option value="' . Request::url() . '?sorting=desc" ' . ($sorting == 'desc' ? 'selected' : '') . '>--Giá giảm dần--</option>
+                                    ';
+                                } else {
+                                    $output .= '
+                                        <option value="' . Request::url() . '?sorting=none&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'none' && $start_price == '' && $end_price == '') || $sorting == 'none' ? 'selected' : '') . '>--Tất cả--</option>
+                                        <option value="' . Request::url() . '?sorting=asc&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'asc' && $start_price !== '' && $end_price !== '') || $sorting == 'asc' ? 'selected' : '') . '>--Giá tăng dần--</option>
+                                        <option value="' . Request::url() . '?sorting=desc&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'desc' && $start_price !== '' && $end_price !== '') || $sorting == 'desc' ? 'selected' : '') . '>--Giá giảm dần--</option>
+                                    ';
+                                }
+                        
+                                echo $output;
+                            @endphp
                         </select>
+                        
                     </div> 
                 </div>
 
@@ -147,7 +165,7 @@
                     <div class="col product-list">
                         <div class="row">
                             @if($data_products->isEmpty())
-                                <p>loi</p>
+                                <h1>NO PRODUCTS</h1>
                             @else
                                 @foreach ($data_products as $item)
                                 <div class='col-4'>
@@ -172,7 +190,52 @@
                                 </div>
                                 @endforeach
                             @endif 
-                        </div> 
+                        </div>
+<!-- Render the pagination links -->
+{{-- <div class="pagination">
+    <ul class="pagination-list">
+        <!-- Previous Page Link -->
+        @if ($data_products->onFirstPage())
+            <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
+                <span aria-hidden="true">@lang('pagination.previous')</span>
+            </li>
+        @else
+            <li>
+                <a href="{{ $data_products->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">@lang('pagination.previous')</a>
+            </li>
+        @endif
+
+        <!-- Pagination Elements -->
+        @foreach ($data_products->links()->elements as $element)
+            <!-- "Three Dots" Separator -->
+            @if (is_string($element))
+                <li class="disabled" aria-disabled="true"><span>{{ $element }}</span></li>
+            @endif
+
+            <!-- Array Of Links -->
+            @if (is_array($element))
+                @foreach ($element as $page => $url)
+                    @if ($page === $data_products->currentPage())
+                        <li class="active" aria-current="page"><span>{{ $page }}</span></li>
+                    @else
+                        <li><a href="{{ $url }}">{{ $page }}</a></li>
+                    @endif
+                @endforeach
+            @endif
+        @endforeach
+
+        <!-- Next Page Link -->
+        @if ($data_products->hasMorePages())
+            <li>
+                <a href="{{ $data_products->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">@lang('pagination.next')</a>
+            </li>
+        @else
+            <li class="disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
+                <span aria-hidden="true">@lang('pagination.next')</span>
+            </li>
+        @endif
+    </ul>
+</div> --}}
                     </div> 
                 </div>
             </div>
