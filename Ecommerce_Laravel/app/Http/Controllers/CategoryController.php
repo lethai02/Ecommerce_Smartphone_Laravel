@@ -29,6 +29,24 @@ class CategoryController extends Controller
         $end_price = $request->input('end_price');
     $data_products->whereBetween('products.Gia', [$start_price, $end_price]);
     }
+
+    if ($request->has('start_price') && $request->has('end_price')) {
+        $start_price = $request->input('start_price');
+    $data_products->whereBetween('products.Gia', [$start_price, $end_price]);
+    }
+
+    if ($request->has('start_price') === false && $request->has('end_price')) {
+        $end_price = $request->input('end_price');
+    $data_products->where('products.Gia', '<=', $end_price);
+
+    }
+
+    if ($request->has('start_price') && $request->has('end_price') === false ) {
+        $start_price = $request->input('start_price');
+    $data_products->where('products.Gia', '>=', $start_price);
+
+    }
+
     // Sort the products based on the selected order
     if ($sortingOrder === 'asc') {
         $data_products->orderBy('Gia', 'asc');
@@ -62,17 +80,14 @@ class CategoryController extends Controller
 
         foreach ($data_products as $data){
             $category_name = $data->Tenthuonghieu;
-            $product_name = $data->Tendt;
         }
         return view('front_end.shop.shopdienthoai',[
             'data_category' => $data_category,
             'data_products'=>$data_products,
             'category_name'=>$category_name,
             'sorting'=>$sortingOrder,
-            //chatgpt
             'start_price' => $request->input('start_price'),
             'end_price' => $request->input('end_price'),
-            'product_name' => $product_name,
         ]);
     }
   

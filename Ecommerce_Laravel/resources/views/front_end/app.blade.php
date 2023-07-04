@@ -29,11 +29,13 @@
 </html>
 <script src="{{asset('asset/slider_price.js')}}"></script>
 <script>
+
+
       $.ajaxSetup({
-    headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-});
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
     $(document).ready(function() {
         $('.checkajax').on('click', function(){
            var a =  $('#start_price').val();
@@ -79,26 +81,70 @@
                     }
         });
 
-        // lưu giá trị trong ô input sau khi submit
-          // Restore input values if available
-          if (localStorage.getItem("start_price")) {
-            $('#start_price').val(localStorage.getItem("start_price"));
-        }
-        if (localStorage.getItem("end_price")) {
-            $('#end_price').val(localStorage.getItem("end_price"));
+       // filter price ranges
+    $('#filter-form input[type="radio"]').change(function() {
+        var href = window.location.href;
+        var tenthuonghieu = href.split('/')[4];
+        var startPrice = 0;
+        var endPrice = 0;
+        var selectedPrice = $(this).val();
+        var priceRange = selectedPrice.split(' AND ');
+        
+        
+        if (priceRange.length === 2) {
+            startPrice = parseInt(priceRange[0]);
+            endPrice = parseInt(priceRange[1]);
         }
 
-        // Submit form event
-        $('#locgia-form').on('submit', function(event) {
-            // Store input values in localStorage
-            localStorage.setItem("start_price", $('#start_price').val());
-            localStorage.setItem("end_price", $('#end_price').val());
+        
+        var url = '';
+        if (tenthuonghieu) {
+            url = 'http://127.0.0.1:8000/dienthoai/' + tenthuonghieu;
+            
+            // Kiểm tra xem URL đã chứa tham số truy vấn chưa
+            var hasQueryParams = url.includes('?');
+
+            // Tạo chuỗi tham số truy vấn
+            var queryParams = [];
+            if (startPrice !== 0) {
+            queryParams.push('start_price=' + startPrice);
+            }
+            if (endPrice !== 0) {
+            queryParams.push('end_price=' + endPrice);
+            }
+
+            // Thay thế chuỗi tham số truy vấn trong URL
+            if (queryParams.length > 0) {
+            var queryString = queryParams.join('&');
+            if (hasQueryParams) {
+                url = url.replace(/\?.*/, '?' + queryString);
+            } else {
+                url += '?' + queryString;
+            }
+            }
+        } else {
+            url = 'http://127.0.0.1:8000/dienthoai';
+            // Tạo chuỗi tham số truy vấn
+            var queryParams = [];
+            if (startPrice !== 0) {
+            queryParams.push('start_price=' + startPrice);
+            }
+            if (endPrice !== 0) {
+            queryParams.push('end_price=' + endPrice);
+            }
+
+            // Tạo đường dẫn hoàn chỉnh
+            if (queryParams.length > 0) {
+            var queryString = queryParams.join('&');
+            url += '?' + queryString;
+            }
+        }
+
+        window.location.href = url;
         });
     });
 
     
-   
-        
     
     // hiển thị giá trị minmax 
     

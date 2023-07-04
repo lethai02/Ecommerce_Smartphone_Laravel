@@ -44,7 +44,7 @@
                                     ';
                                 } else {
                                     $output .= '
-                                        <option value="' . Request::url() . '?sorting=none&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'none' && $start_price == '' && $end_price == '') || $sorting == 'none' ? 'selected' : '') . '>--Tất cả--</option>
+                                        <option value="' . Request::url() . '?sorting=none&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'none' && $start_price == '' && $end_price == '') || $sorting == 'none' ? 'selected' : '') . '>--Lọc--</option>
                                         <option value="' . Request::url() . '?sorting=asc&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'asc' && $start_price !== '' && $end_price !== '') || $sorting == 'asc' ? 'selected' : '') . '>--Giá tăng dần--</option>
                                         <option value="' . Request::url() . '?sorting=desc&start_price=' . $start_price . '&end_price=' . $end_price . '" ' . (($sorting == 'desc' && $start_price !== '' && $end_price !== '') || $sorting == 'desc' ? 'selected' : '') . '>--Giá giảm dần--</option>
                                     ';
@@ -82,13 +82,13 @@
                             <ul class="filter-body-list">
    
                                 <li class="filter-body-item {{ empty($category_name) ? 'active' : '' }}" >
-                                <a href="{{ URL('dienthoai/')}}">Toàn bộ </a>
-                                <i class="fa-solid fa-circle-dot "></i>
-                                    </li>
+                                    <a href="{{ URL('dienthoai/')}}">Toàn bộ </a>
+                                    <i class="fa-solid fa-circle-dot "></i>
+                                </li>
                                 @foreach ($data_category as $data)
                                 @php
-                              $className = ($data->Tenthuonghieu == $category_name) ? 'active' : '';
-                          @endphp
+                                    $className = ($data->Tenthuonghieu == $category_name) ? 'active' : '';
+                                @endphp
                                     <li class="filter-body-item {{$className}}" >
                                         <a href="{{ URL('dienthoai/'.$data->Tenthuonghieu)}}">
                                             {{ $data->Tenthuonghieu }}
@@ -123,7 +123,7 @@
                                 </form>  --}}
 
                                 {{-- test --}}
-                                <form id="locgia-form"  action="{{Request::url()}}" >
+                                {{-- <form id="locgia-form"  action="{{Request::url()}}" >
                                     <div id="slider-range"></div>
                                     <input type="text" id="amount"  readonly style="border:0; color:#f6931f; font-weight:bold;">
                                     <br>
@@ -134,7 +134,7 @@
                                     <a class="checkajax">LOC GIA </a>
                                    
 
-                                </form>
+                                </form> --}}
 
                                 <div id="testgia"></div>
                             
@@ -160,6 +160,39 @@
                                 </div>
                             </div> --}}
                         </div>
+
+                        <div id="filter-form">
+                            <form>
+                                <ul class="list-style-6 margin-50px-bottom text-small">
+                                   <li>
+                                        <label>
+                                            <input type="radio" name="price" value="20 AND 50" {{$start_price == '20' && $end_price=='50' ? 'checked' : ''}}>20 tr- 50 tr
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price" value="25 AND 150" {{$start_price == '25' && $end_price=='150' ? 'checked' : ''}}>25 - 150
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price" value="150 AND 300" {{$start_price == '150' && $end_price=='300' ? 'checked' : ''}}>150 - 300
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price" value=" 0 AND 50" {{$start_price == '' && $end_price=='50' ? 'checked' : ''}}> Dưới 50
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="radio" name="price" value=" 300 AND 0" {{$start_price == '300' && $end_price=='' ? 'checked' : ''}}> Trên 300
+                                        </label>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>
+                      
                     </div>
 
                     <div class="col product-list">
